@@ -7,8 +7,8 @@
 :root {
   --shelf-wood: #8B5E3C;
   --shelf-wood-dark: #6B4226;
-  --bg: #1a1a2e;
-  --text: #eee;
+  --bg: #c0c0c0;
+  --text: #222;
 }
 
 body {
@@ -148,10 +148,10 @@ h1 {
 .add-book-btn {
   width: 44px;
   height: 180px;
-  border: 2px dashed rgba(255,255,255,0.25);
+  border: 2px dashed rgba(0,0,0,0.25);
   border-radius: 3px 3px 0 0;
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.5);
+  background: rgba(0,0,0,0.04);
+  color: rgba(0,0,0,0.5);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -163,9 +163,9 @@ h1 {
 }
 
 .add-book-btn:hover {
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.8);
+  border-color: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.08);
+  color: rgba(0,0,0,0.8);
 }
 
 .add-book-btn .plus {
