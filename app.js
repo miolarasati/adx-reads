@@ -38,8 +38,8 @@ function randomHeight() {
   return MIN_HEIGHT + Math.floor(Math.random() * (MAX_HEIGHT - MIN_HEIGHT));
 }
 
-function buildAmazonSearchUrl(title) {
-  return `https://www.amazon.com/s?k=${encodeURIComponent(title)}`;
+function buildGoodreadsSearchUrl(title) {
+  return `https://www.goodreads.com/search?q=${encodeURIComponent(title)}`;
 }
 
 function escapeHtml(str) {
@@ -48,33 +48,48 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function createBookEl(book) {
+function createBookEl(book, bookKey) {
   const el = document.createElement('div');
   el.className = 'book';
   el.setAttribute('role', 'button');
   el.setAttribute('tabindex', '0');
   el.setAttribute('aria-label', `${book.title} — added by ${book.reader}`);
 
-  const link = book.link || buildAmazonSearchUrl(book.title);
+  const link = book.link || buildGoodreadsSearchUrl(book.title);
+  const borrowedBy = book.borrowedBy ? `Borrowed by ${escapeHtml(book.borrowedBy)}` : '';
 
   el.innerHTML = `
     <div class="book-tooltip">
       <div class="tt-title">${escapeHtml(book.title)}</div>
       <div class="tt-desc">${escapeHtml(book.desc)}</div>
       <div class="tt-reader">Added by ${escapeHtml(book.reader)}</div>
+      ${borrowedBy ? `<div class="tt-borrowed">${borrowedBy}</div>` : ''}
+      <div class="tt-actions">
+        <a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="tt-link">View on Goodreads</a>
+        <button class="tt-borrow-btn" data-key="${bookKey}">${book.borrowedBy ? 'Return Book' : 'Borrow Book'}</button>
+      </div>
     </div>
     <div class="book-spine" style="height:${book.height}px;background:${book.color}">
       ${escapeHtml(book.title)}
     </div>
   `;
 
-  const openLink = () => window.open(link, '_blank', 'noopener');
-  el.addEventListener('click', openLink);
-  el.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      openLink();
+  // Handle borrow/return
+  el.querySelector('.tt-borrow-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (book.borrowedBy) {
+      booksRef.child(bookKey).update({ borrowedBy: null });
+    } else {
+      const alias = prompt('Enter your alias to borrow this book:');
+      if (alias && alias.trim()) {
+        booksRef.child(bookKey).update({ borrowedBy: alias.trim() });
+      }
     }
+  });
+
+  // Goodreads link on click (but not on tooltip)
+  el.querySelector('.tt-link').addEventListener('click', (e) => {
+    e.stopPropagation();
   });
 
   return el;
@@ -84,8 +99,8 @@ function renderBooks(booksObj) {
   shelf.querySelectorAll('.book').forEach(b => b.remove());
   if (!booksObj) return;
 
-  Object.values(booksObj).forEach(book => {
-    shelf.insertBefore(createBookEl(book), addBtn);
+  Object.entries(booksObj).forEach(([key, book]) => {
+    shelf.insertBefore(createBookEl(book, key), addBtn);
   });
 }
 

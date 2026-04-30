@@ -125,6 +125,7 @@ h1 {
 
 .book:hover .book-tooltip {
   display: block;
+  pointer-events: auto;
 }
 
 .book-tooltip .tt-title {
@@ -142,6 +143,52 @@ h1 {
   font-size: 0.7rem;
   opacity: 0.5;
   font-style: italic;
+}
+
+.book-tooltip .tt-borrowed {
+  font-size: 0.7rem;
+  color: #e67e22;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.book-tooltip .tt-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  pointer-events: auto;
+}
+
+.book-tooltip .tt-link {
+  flex: 1;
+  text-align: center;
+  padding: 5px 0;
+  background: #5c6bc0;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.book-tooltip .tt-link:hover {
+  background: #7986cb;
+}
+
+.book-tooltip .tt-borrow-btn {
+  flex: 1;
+  padding: 5px 0;
+  background: #00b894;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-tooltip .tt-borrow-btn:hover {
+  background: #00d2a0;
 }
 
 /* Add Book Button */
