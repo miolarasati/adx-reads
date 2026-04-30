@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADX Reads</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>📚 ADX Reads</h1>
+      <p class="subtitle">Share what you're reading</p>
+    </header>
+
+    <div class="bookshelf">
+      <div class="shelf" id="shelf">
+        <button class="add-book-btn" id="addBookBtn" aria-label="Add a book">
+          <span class="plus">+</span>
+          <span class="btn-label">Add Book</span>
+        </button>
+      </div>
+      <div class="shelf-board"></div>
+    </div>
+  </div>
+
+  <!-- Add Book Modal -->
+  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <h2 id="modalTitle">Add a Book</h2>
+      <form id="bookForm">
+        <label for="bookTitle">Book Title</label>
+        <input type="text" id="bookTitle" required maxlength="80" placeholder="e.g. The Pragmatic Programmer">
+
+        <label for="bookDesc">Quick Take <span class="char-count">(<span id="charCount">0</span>/140)</span></label>
+        <textarea id="bookDesc" required maxlength="140" rows="2" placeholder="What's it about? Why read it?"></textarea>
+
+        <label for="bookReader">Your Name</label>
+        <input type="text" id="bookReader" required maxlength="40" placeholder="e.g. Alex">
+
+        <label for="bookLink">Amazon Link <span class="optional">(optional)</span></label>
+        <input type="url" id="bookLink" placeholder="https://amazon.com/dp/...">
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn-submit">Place on Shelf</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
