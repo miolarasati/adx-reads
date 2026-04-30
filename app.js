@@ -84,7 +84,12 @@ function createBookEl(book, bookKey) {
       if (alias && alias.trim()) {
         const borrower = alias.trim();
         booksRef.child(bookKey).update({ borrowedBy: borrower });
-        window.open(`https://amazon.enterprise.slack.com/messages/${book.reader}`, '_blank', 'noopener');
+        // Use location.href instead of window.open to avoid popup blockers
+        const slackUrl = `https://amazon.enterprise.slack.com/messages/${encodeURIComponent(book.reader)}`;
+        const openSlack = confirm(`Opening Slack DM with ${book.reader}. Continue?`);
+        if (openSlack) {
+          window.location.href = slackUrl;
+        }
       }
     }
   });
