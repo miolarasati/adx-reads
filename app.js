@@ -68,6 +68,10 @@ function createBookEl(book, bookKey) {
         <a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="tt-link">View on Goodreads</a>
         <button class="tt-borrow-btn" data-key="${bookKey}">${book.borrowedBy ? 'Return Book' : 'Borrow Book'}</button>
       </div>
+      <div class="tt-actions tt-manage">
+        <button class="tt-edit-btn" data-key="${bookKey}">✏️ Edit</button>
+        <button class="tt-delete-btn" data-key="${bookKey}">🗑 Delete</button>
+      </div>
     </div>
     <div class="book-spine" style="height:${book.height}px;background:${book.color}">
       ${escapeHtml(book.title)}
@@ -99,6 +103,29 @@ function createBookEl(book, bookKey) {
     e.stopPropagation();
   });
 
+  // Edit book
+  el.querySelector('.tt-edit-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    editingKey = bookKey;
+    document.getElementById('modalTitle').textContent = 'Edit Book';
+    document.getElementById('bookTitle').value = book.title;
+    document.getElementById('bookDesc').value = book.desc;
+    document.getElementById('bookReader').value = book.reader;
+    document.getElementById('bookLink').value = book.link || '';
+    charCount.textContent = book.desc.length;
+    document.querySelector('.btn-submit').textContent = 'Save Changes';
+    modal.classList.add('active');
+    document.getElementById('bookTitle').focus();
+  });
+
+  // Delete book
+  el.querySelector('.tt-delete-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (confirm(`Remove "${book.title}" from the shelf?`)) {
+      booksRef.child(bookKey).remove();
+    }
+  });
+
   return el;
 }
 
@@ -111,7 +138,12 @@ function renderBooks(booksObj) {
   });
 }
 
+let editingKey = null;
+
 function openModal() {
+  editingKey = null;
+  document.getElementById('modalTitle').textContent = 'Add a Book';
+  document.querySelector('.btn-submit').textContent = 'Place on Shelf';
   modal.classList.add('active');
   document.getElementById('bookTitle').focus();
 }
@@ -120,6 +152,7 @@ function closeModal() {
   modal.classList.remove('active');
   form.reset();
   charCount.textContent = '0';
+  editingKey = null;
 }
 
 // Real-time listener — syncs across all browsers
@@ -137,15 +170,20 @@ descInput.addEventListener('input', () => { charCount.textContent = descInput.va
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const book = {
+  const bookData = {
     title: document.getElementById('bookTitle').value.trim(),
     desc: document.getElementById('bookDesc').value.trim(),
     reader: document.getElementById('bookReader').value.trim(),
     link: document.getElementById('bookLink').value.trim() || '',
-    color: randomColor(),
-    height: randomHeight(),
   };
 
-  booksRef.push(book);
+  if (editingKey) {
+    booksRef.child(editingKey).update(bookData);
+  } else {
+    bookData.color = randomColor();
+    bookData.height = randomHeight();
+    booksRef.push(bookData);
+  }
+
   closeModal();
 });

@@ -191,6 +191,32 @@ h1 {
   background: #00d2a0;
 }
 
+.book-tooltip .tt-manage {
+  margin-top: 4px;
+}
+
+.book-tooltip .tt-edit-btn,
+.book-tooltip .tt-delete-btn {
+  flex: 1;
+  padding: 5px 0;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 6px;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-tooltip .tt-edit-btn:hover {
+  background: #e8e8e8;
+}
+
+.book-tooltip .tt-delete-btn:hover {
+  background: #ffe0e0;
+  color: #d63031;
+}
+
 /* Add Book Button */
 .add-book-btn {
   width: 44px;
