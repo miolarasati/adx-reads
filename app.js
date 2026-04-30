@@ -84,10 +84,7 @@ function createBookEl(book, bookKey) {
       if (alias && alias.trim()) {
         const borrower = alias.trim();
         booksRef.child(bookKey).update({ borrowedBy: borrower });
-        const ownerEmail = `${book.reader}@amazon.com`;
-        const subject = encodeURIComponent(`📚 Book Borrow Request: ${book.title}`);
-        const body = encodeURIComponent(`Hi ${book.reader},\n\n${borrower} would like to borrow "${book.title}" from the ADX Reads bookshelf.\n\nThanks!`);
-        window.open(`mailto:${ownerEmail}?subject=${subject}&body=${body}`, '_self');
+        window.open(`https://amazon.enterprise.slack.com/messages/${book.reader}`, '_blank', 'noopener');
       }
     }
   });
